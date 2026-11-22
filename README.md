@@ -69,30 +69,46 @@ Tekan `F12` lalu `Ctrl+Shift+M` untuk tampilan ukuran HP (sekitar 360x800). Mode
 
 ## Struktur Folder
 
+Mengikuti struktur dari materi praktikum (Week 11).
+
 ```
 lib/
-├── main.dart
-├── core/          # dipakai lintas fitur
-│   ├── constants/
-│   ├── theme/
-│   ├── routes/
-│   ├── errors/
-│   ├── services/
-│   ├── providers/
-│   ├── utils/
-│   └── widgets/
-└── features/      # satu folder per fitur
-    ├── splash/
-    ├── auth/
-    ├── home/
-    ├── collection/
-    ├── routine/
-    ├── diary/
-    └── profile/
+|-- main.dart             # titik awal: main() -> MyApp -> MaterialApp
+|-- screens/              # satu file per layar, dikelompokkan per fitur
+|   |-- main_screen.dart  # bottom navigation (Beranda, Koleksi, Diary, Profil)
+|   |-- splash/
+|   |-- auth/             # login, registrasi
+|   |-- home/
+|   |-- routine/
+|   |-- collection/
+|   |-- diary/
+|   `-- profile/
+|-- services/             # kode yang berhubungan dengan layanan eksternal (Firebase, notifikasi)
+|-- models/               # class data (produk, catatan diary, dst.)
+|-- widgets/              # widget yang dipakai ulang di banyak screen
+|-- theme/                # warna dan tema bersama
+`-- utils/                # fungsi bantu (format tanggal, validasi)
+assets/
+|-- images/               # gambar lokal
+`-- icons/
+test/                     # file pengujian
 ```
 
-Setiap fitur di `features/` dipecah menjadi `models/`, `data/`, `providers/`, dan `presentation/` (halaman dan `widgets/`). Pendekatannya **feature-first**: tiap anggota mengerjakan foldernya sendiri agar jarang bentrok.
+- Satu layar = satu file di `lib/screens/<fitur>/`, nama file `nama_screen.dart`.
+- Import memakai `package:rvpa/...`, contoh: `import 'package:rvpa/screens/home/home_screen.dart';`
+- Gambar ditaruh di `assets/images/` (sudah terdaftar di `pubspec.yaml`), lalu dipanggil dengan `Image.asset('assets/images/nama.png')`.
+- Satu orang satu folder fitur di `lib/screens/`, supaya jarang bentrok.
 
+### Perintah yang sering dipakai
+
+| Perintah | Fungsi |
+|---|---|
+| `flutter pub get` | Mengunduh dependency baru |
+| `flutter analyze` | Mengecek warning dan error pada kode |
+| `flutter test` | Menjalankan pengujian |
+| `flutter run` | Menjalankan aplikasi |
+| `flutter clean` | Menghapus cache (lanjutkan dengan `flutter pub get`) kalau aplikasi error setelah update dependency |
+| `flutter build apk` | Menghasilkan file APK untuk dipasang di HP |
 ## Alur Kerja Git
 
 | Branch | Fungsi |
@@ -148,7 +164,7 @@ Contoh: `feat: add expiry warning on product detail`
 
 - Nama file `snake_case.dart`, nama class `PascalCase`.
 - Nama kode (class, variabel, file) memakai bahasa Inggris, teks yang tampil ke pengguna memakai bahasa Indonesia.
-- Hindari menulis warna dan teks UI langsung di tiap halaman. Pakai konstanta bersama di `lib/core/constants/` agar tampilan konsisten (warna, tipografi, dan teks final menunggu panduan desain dari Figma).
+- Hindari menulis warna dan teks UI langsung di tiap halaman. Pakai konstanta bersama di `lib/theme/` agar tampilan konsisten (warna, tipografi, dan teks final menunggu panduan desain dari Figma).
 - Jangan commit file rahasia (`.env`, `*.jks`, `key.properties`).
 - Jalankan `flutter analyze` sebelum commit, dan usahakan nol warning.
 
